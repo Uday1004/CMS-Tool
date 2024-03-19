@@ -1,30 +1,54 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react';
+import {firestore} from './Firebase';
+import {collection , getDocs} from '@firebase/firestore'
+
 
 function Home() {
+    const [blogData, setBlogData] = useState([]);
+
+  useEffect(() => {
+    const fetchDataFromFirebase = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, "Blog-Home-S1"));
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push(doc.data());
+        });
+        setBlogData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchDataFromFirebase();
+  }, []);
   return (
     <div>
       <section class="py-5">
-                <div class="container px-5">
-                    <h1 class="fw-bolder fs-5 mb-4">Company Blog</h1>
+        {blogData.map((blogItem)=>(
+
+                <div  class="container px-5">
+                    <h1 class="fw-bolder fs-5 mb-4">{blogItem.CompanyTitle}</h1>
                     <div class="card border-0 shadow rounded-3 overflow-hidden">
                         <div class="card-body p-0">
                             <div class="row gx-0">
                                 <div class="col-lg-6 col-xl-5 py-lg-5">
                                     <div class="p-4 p-md-5">
-                                        <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                                        <div class="h2 fw-bolder">Article heading goes here</div>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique delectus ab doloremque, qui doloribus ea officiis...</p>
-                                        <a class="stretched-link text-decoration-none" href="#!">
+                                        <div class="badge bg-primary bg-gradient rounded-pill mb-2">{blogItem.ArticleTag}</div>
+                                        <div class="h2 fw-bolder">{blogItem.ArticleTitle}</div>
+                                        <p>{blogItem.ArticleParagraph}</p>
+                                        <a class="stretched-link text-decoration-none" href={blogItem.ArticleLink}>
                                             Read more
                                             <i class="bi bi-arrow-right"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-xl-7"><div class="bg-featured-blog backgroud-image"></div></div>
+                                <div class="col-lg-6 col-xl-7"><img src={blogItem.fileURL} alt="" className='bg-featured-blog img-fluid' /></div>
                             </div>
                         </div>
                     </div>
                 </div>
+        ))}
             </section>
             <section class="py-5 bg-light">
                 <div class="container px-5">
@@ -86,19 +110,19 @@ function Home() {
                             <div class="card h-100 shadow border-0">
                                 <img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d" alt="..." />
                                 <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
+                                    {/* <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div> */}
                                     <a class="text-decoration-none link-dark stretched-link" href="#!"><div class="h5 card-title mb-3">Blog post title</div></a>
                                     <p class="card-text mb-0">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                                     <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
+                                        {/* <div class="d-flex align-items-center">
                                             <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
                                             <div class="small">
                                                 <div class="fw-bold">Kelly Rowan</div>
                                                 <div class="text-muted">March 12, 2023 &middot; 6 min read</div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
@@ -107,19 +131,19 @@ function Home() {
                             <div class="card h-100 shadow border-0">
                                 <img class="card-img-top" src="https://dummyimage.com/600x350/adb5bd/495057" alt="..." />
                                 <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">Media</div>
+                                    {/* <div class="badge bg-primary bg-gradient rounded-pill mb-2">Media</div> */}
                                     <a class="text-decoration-none link-dark stretched-link" href="#!"><div class="h5 card-title mb-3">Another blog post title</div></a>
                                     <p class="card-text mb-0">This text is a bit longer to illustrate the adaptive height of each card. Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                                     <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
+                                        {/* <div class="d-flex align-items-center">
                                             <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
                                             <div class="small">
                                                 <div class="fw-bold">Josiah Barclay</div>
                                                 <div class="text-muted">March 23, 2023 &middot; 4 min read</div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
@@ -128,19 +152,19 @@ function Home() {
                             <div class="card h-100 shadow border-0">
                                 <img class="card-img-top" src="https://dummyimage.com/600x350/6c757d/343a40" alt="..." />
                                 <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
+                                    {/* <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div> */}
                                     <a class="text-decoration-none link-dark stretched-link" href="#!"><div class="h5 card-title mb-3">The last blog post title is a little bit longer than the others</div></a>
                                     <p class="card-text mb-0">Some more quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                                     <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
+                                        {/* <div class="d-flex align-items-center">
                                             <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
                                             <div class="small">
                                                 <div class="fw-bold">Evelyn Martinez</div>
                                                 <div class="text-muted">April 2, 2023 &middot; 10 min read</div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
